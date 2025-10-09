@@ -149,7 +149,7 @@ $\frac{DT}{dx} = -Q/k$
 
 We have:
 
-$Q = \frac{T_1-T_3}{\frac{x_1}{k_1 A} + \frac{x_2}{k_2 A} } = \frac{100}{\frac{x_1}{k_1}+\frac{x_1}{2k_1}} = \frac{200k_1}{3x_1} = 848,000 \frac{W}{m^2}$
+$Q = \frac{T_1-T_3}{\frac{x_1}{k_1 A} + \frac{x_2}{k_2 A} } = \frac{100}{\frac{x_1}{k_1 A}+\frac{x_1}{2k_1A}} = \frac{200k_1A}{3x_1} = 848,000 \frac{W}{m^2}$
 
 Thus we expect a gradients of $\frac{-848000}{318} = 2666.66666...$ and $\frac{-848000}{636} = 1333.33333...$
 

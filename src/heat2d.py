@@ -4,7 +4,7 @@ from temperatureSolver.src.args import Args
 from temperatureSolver.src.mui import MUI
 
 class Heat2d:
-    def __init__(self, time=1.0, couplingMethod ='dirichNeum'):
+    def __init__(self, time=20, couplingMethod ='dirichNeum'):
         # Parse solver arguments
         args = Args().args
 
@@ -16,10 +16,7 @@ class Heat2d:
         self.alpha = args.alpha # diffusivity
         self.kappa = args.kappa   # conductivity
         self.couplingMethod = couplingMethod
-        self.setup()
 
-
-    def setup(self):
         # derived properties
         # we assume the boundary for coupling has zero width
         self.dx = self.width/(self.nodes-1)
