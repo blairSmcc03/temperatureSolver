@@ -1,0 +1,5 @@
+matplotlib==3.5.1
+mpi4py==4.1.0
+mui4py==2.0
+numpy==1.21.5
+pytest==8.4.2
