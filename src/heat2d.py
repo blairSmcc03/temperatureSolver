@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from temperatureSolver.src.args import Args
-from temperatureSolver.src.mui import MUI
+from args import Args
+from mui import MUI
 
 class Heat2d:
     def __init__(self, time=20, couplingMethod ='dirichNeum'):
@@ -260,7 +260,16 @@ class Heat2d:
         
         print("Solver {:d}       Left boundary has temperature: {:3f}K         Right boundary has temperature: {:3f}K".format(self.solverNum, np.average(self.T[0]), np.average(self.T[-1])))
 
-        print((self.T[:, int(self.nodes/2)]+self.T[:, int((self.nodes/2)+1)])/2)
+        x_axis = (self.T[:, int(self.nodes/2)]+self.T[:, int((self.nodes/2)+1)])/2
+        f = open("pythonHeatData.xy", "w")
+        x = 1.0
+        for i in range(self.nodes):
+            s = str(x) + "  " + str(x_axis[i]) + "\n"
+            x += self.dx
+
+            f.write(s)
+
+        f.close()
 
         plt.show()
 

@@ -1,4 +1,4 @@
-from temperatureSolver.src.heat2d import Heat2d
+from heat2d import Heat2d
 
 
 def main(time, couplingMethod, testing=True):
@@ -13,4 +13,4 @@ def main(time, couplingMethod, testing=True):
     return solver.getInterfaceTemperature()
 
 if __name__ == "__main__":
-    main(time=100, couplingMethod="linearInterpolation", testing=False)
+    main(time=70, couplingMethod="linearInterpolation", testing=False)
