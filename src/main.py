@@ -3,7 +3,6 @@ from temperatureSolver.src.heat2d import Heat2d
 
 def main(time, couplingMethod, testing=True):
     solver = Heat2d(time, couplingMethod)
-    solver.setLeftBoundaryCondition('flux', 6360)
     i = 0
     while i < solver.time:
         solver.calculateHeatEquation(i, animate=False)
@@ -14,4 +13,4 @@ def main(time, couplingMethod, testing=True):
     return solver.getInterfaceTemperature()
 
 if __name__ == "__main__":
-    main(time=100, couplingMethod="dirichNeum", testing=False)
+    main(time=100, couplingMethod="linearInterpolation", testing=False)

@@ -78,6 +78,9 @@ class Heat2d:
         # set default BC
         if self.solverNum == 0:
             self.setLeftBoundaryCondition('temp', zeroK+100)
+
+        if self.solverNum == self.numSolvers-1:
+            self.setRightBoundaryCondition('temp', zeroK)
  
 
     def initialiseTempField(self, val: float):
@@ -85,11 +88,23 @@ class Heat2d:
 
     def setLeftBoundaryCondition(self, type: str, val: float):
         if type == 'flux':
-            self.boundaryType = 'flux'
-            self.boundaryValue = (np.full(shape=(1, self.nodes), fill_value=val, dtype=np.float64)*self.dx)/(self.kappa*self.height*self.thickness)
+            self.leftBoundaryType = 'flux'
+            self.leftBoundaryValue = (np.full(shape=(1, self.nodes), fill_value=val, dtype=np.float64)*self.dx)/(self.kappa*self.height*self.thickness)
         elif type == 'temp':
-            self.boundaryType = 'temp'
-            self.boundaryValue = np.full(shape=(1, self.nodes), fill_value=val, dtype=np.float64)
+            self.leftBoundaryType = 'temp'
+            self.leftBoundaryValue = np.full(shape=(1, self.nodes), fill_value=val, dtype=np.float64)
+            
+        else:
+            raise ValueError('Boundary condition can have type \'temp\' or \'flux\', not ' + type + ".")
+
+
+    def setRightBoundaryCondition(self, type: str, val: float):
+        if type == 'flux':
+            self.rightBoundaryType = 'flux'
+            self.rightBoundaryValue = (np.full(shape=(1, self.nodes), fill_value=val, dtype=np.float64)*self.dx)/(self.kappa*self.height*self.thickness)
+        elif type == 'temp':
+            self.rightBoundaryType = 'temp'
+            self.rightBoundaryValue = np.full(shape=(1, self.nodes), fill_value=val, dtype=np.float64)
             
         else:
             raise ValueError('Boundary condition can have type \'temp\' or \'flux\', not ' + type + ".")
@@ -118,10 +133,10 @@ class Heat2d:
                 self.T[0, :] = self.T[1, :] - (q/self.kappa * self.dx/self.cellArea)
         # if we are leftmost solver enforce initial condition
         else:
-            if self.boundaryType == 'temp':
-                self.T[0, :] = self.boundaryValue
+            if self.leftBoundaryType == 'temp':
+                self.T[0, :] = self.leftBoundaryValue
             else:
-                self.T[0, :] = self.boundaryValue + self.T[1, :]
+                self.T[0, :] = self.leftBoundaryValue + self.T[1, :]
 
         # set right boundary as T[0, : ] of next solver (Dirichlet)
         if self.solverNum != self.numSolvers-1:
@@ -139,7 +154,10 @@ class Heat2d:
                 self.T[-1, :] = self.T[-2, :] - (q/self.kappa * self.dx/self.cellArea)
         # if we are the rightmost solver enforce initial condition
         else:
-            self.T[-1, :] = self.zerosX
+            if self.rightBoundaryType == 'temp':
+                self.T[-1, :] = self.rightBoundaryValue
+            else:
+                self.T[-1, :] = self.rightBoundaryValue + self.T[-2, :]
         #Y
         # set gradient condition y boundaries, for now with 0 flux
         yFlux = 0
@@ -163,10 +181,10 @@ class Heat2d:
     
         # if we are leftmost solver enforce initial condition
         else:
-            if self.boundaryType == 'temp':
-                self.T[0, :] = self.boundaryValue
+            if self.leftBoundaryType == 'temp':
+                self.T[0, :] = self.leftBoundaryValue
             else:
-                self.T[0, :] = self.boundaryValue + self.T[1, :]
+                self.T[0, :] = self.leftBoundaryValue + self.T[1, :]
 
         # set right boundary as T[1, : ] of next solver (Dirichlet)
         if self.solverNum != self.numSolvers-1:
@@ -183,7 +201,10 @@ class Heat2d:
             
         # if we are the rightmost solver enforce initial condition
         else:
-            self.T[-1, :] = self.zerosX
+            if self.rightBoundaryType == 'temp':
+                self.T[-1, :] = self.rightBoundaryValue
+            else:
+                self.T[-1, :] = self.rightBoundaryValue + self.T[-2, :]
         #Y
         # set gradient condition y boundaries, for now with 0 flux
         yFlux = 0
@@ -238,9 +259,10 @@ class Heat2d:
 
         
         print("Solver {:d}       Left boundary has temperature: {:3f}K         Right boundary has temperature: {:3f}K".format(self.solverNum, np.average(self.T[0]), np.average(self.T[-1])))
+
+        print((self.T[:, int(self.nodes/2)]+self.T[:, int((self.nodes/2)+1)])/2)
+
         plt.show()
 
     def getInterfaceTemperature(self):
         return (np.average(self.T[0]), np.average(self.T[-1]))
-
-       
