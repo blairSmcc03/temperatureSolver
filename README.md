@@ -1,4 +1,4 @@
-# Temperature Solver
+# heatSolverPy
 
 ## Usage
 
