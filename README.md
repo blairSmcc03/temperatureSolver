@@ -5,13 +5,14 @@
 The code assumes that some temperature is applied evenly across the leftmost boundary and then calculates the resulting temperature gradient at equilibrium. For small values of nodes the gradient can be viewed in real time but incurs considerable slowdown (see animate parameter for Heat2d constructor). To run a simple case with default values and only 1 solver use:
 
 ```bash
-python3 - m temperatureSolver.src.main
+cd heatSolverPy/src
+python3 main.py
 ```
 
-Note that this must be run from the parent directory. To customise use as arguments below (options section shows default values):
+To customise use arguments below (options section shows default values):
 
 ```bash
-python3 - m temperatureSolver.src.main [-h] [--height HEIGHT] [--length LENGTH] [--thickness THICKNESS] [--alpha ALPHA] [--kappa KAPPA] [--nodes NODES]
+python3 main.py [-h] [--height HEIGHT] [--length LENGTH] [--thickness THICKNESS] [--alpha ALPHA] [--kappa KAPPA] [--nodes NODES]
 
 options:
   -h, --help            show this help message and exit
@@ -27,18 +28,19 @@ To run multiple solvers use mpirun as below:
 
 ```bash
 # Two solvers exactly the same
-mpirun -np 2 python3 - m temperatureSolver.src.main --length 0.025
+mpirun -np 2 python3 main.py --length 0.025
 
 #Two solvers with differing arguments
-mpirun -np 1 python3 - m temperatureSolver.src.main --length 0.025 : -np 1 python3 - m temperatureSolver.src.main --length 0.05 --kappa 636 --alpha 2.55e-4
+mpirun -np 1 python3 main.py --length 0.025 : -np 1 python3 main.py --length 0.05 --kappa 636 --alpha 2.55e-4
 ```
 
 ## Dependencies
 
-This project uses numpy, matlplotlib, argparser, mpi4py, mui4py, and pytest. To install these dependencies use
+This project uses numpy, matlplotlib, argparser, mpi4py, and pytest. To install these dependencies use
 ```bash
 pip install -r requirements.txt
 ```
+To install mui4py, follow the instructions found in [MUI Wrapper documentation](https://github.com/MxUI/MUI/tree/master/wrappers/Python)
 
 ## Governing Equations and Approximation
 
@@ -120,7 +122,7 @@ mpirun -np X pytest tests.py
 
 To run use:
 ```bash
-mpirun -np 1 python3 -m temperatureSolver.src.main --length 0.025 --nodes 100 : -np 1 python3 -m temperatureSolver.src.main --length 0.025 --alpha 2.5e-4 --kappa 636 --nodes 100
+mpirun -np 1 python3 main.py --length 0.025 --nodes 100 : -np 1 python3 main.py --length 0.025 --alpha 2.5e-4 --kappa 636 --nodes 100
 ```
 
 #### Parameters
